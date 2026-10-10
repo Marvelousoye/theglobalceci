@@ -64,6 +64,19 @@
         .glow { background: radial-gradient(closest-side, rgba(255, 42, 64, var(--glow, .1)), transparent); }
         /* Grain overlay is desktop-only */
         @media (max-width: 1023px) { .noise-overlay { display: none; } }
+        /* Touch / small screens have no hover, so the same effects play when an item scrolls into focus */
+        @media (hover: none), (max-width: 1023px) {
+            section .group.is-active { border-color: rgba(255, 42, 64, .5); }
+            section .group.is-active.hover\:bg-brandCardHover { background-color: #1F1F1F; }
+            section .group.is-active.hover\:-translate-y-2 { transform: translateY(-0.5rem); }
+            .group.is-active .group-hover\:grayscale-0 { --tw-grayscale: grayscale(0); }
+            .group.is-active .group-hover\:scale-105 { transform: scale(1.05); }
+            .group.is-active .group-hover\:scale-110 { transform: scale(1.1); }
+            .group.is-active .group-hover\:translate-x-1 { transform: translateX(.25rem); }
+            .group.is-active .group-hover\:text-brandRed { color: #FF2A40; }
+            .group.is-active .group-hover\:text-white { color: #fff; }
+            .group.is-active .group-hover\:bg-brandRed { background-color: #FF2A40; }
+        }
         @media (prefers-reduced-motion: reduce) {
             .js .reveal-up, .js .reveal-scale { opacity: 1; animation: none !important; }
             .animate-ping { animation: none; }
@@ -600,6 +613,28 @@
                 });
             }, { rootMargin: '0px 0px -2% 0px', threshold: 0 });
             items.forEach(el => io.observe(el));
+        })();
+
+        // ---- Touch / small screens: play the "hover" effects when an item scrolls into focus ----
+        (function () {
+            const focusMode = window.matchMedia('(hover: none), (max-width: 1023px)');
+            const targets = document.querySelectorAll('section .group');
+            if (!('IntersectionObserver' in window) || !targets.length) return;
+            // active while the item overlaps the middle 40% of the screen
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(e => e.target.classList.toggle('is-active', e.isIntersecting));
+            }, { rootMargin: '-30% 0px -30% 0px', threshold: 0 });
+            const sync = () => {
+                if (focusMode.matches) {
+                    targets.forEach(t => io.observe(t));
+                } else {
+                    io.disconnect();
+                    targets.forEach(t => t.classList.remove('is-active'));
+                }
+            };
+            sync();
+            if (focusMode.addEventListener) focusMode.addEventListener('change', sync);
+            else if (focusMode.addListener) focusMode.addListener(sync);
         })();
 
         // ---- Mobile menu ----
