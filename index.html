@@ -524,8 +524,8 @@
                         <label class="block text-xs uppercase tracking-widest text-brandText/60 mb-2 font-mono">Message</label>
                         <textarea rows="4" name="message" required class="w-full bg-brandBg border border-white/10 rounded-2xl px-5 py-4 text-brandText focus:outline-none focus:border-brandAccent transition-colors" placeholder="What do you need help building?"></textarea>
                     </div>
-                    <button type="submit" class="magnetic-btn w-full py-5 rounded-2xl bg-brandAccent text-brandBg font-display font-bold text-lg hover:bg-brandAccentHover transition-all duration-300 shadow-lg">
-                        Send Message ↗
+                    <button type="submit" class="magnetic-btn w-full flex items-center justify-center gap-3 py-5 rounded-2xl bg-brandAccent text-brandBg font-display font-bold text-lg hover:bg-brandAccentHover transition-all duration-300 shadow-lg">
+                        Send Message <svg class="inline-block shrink-0 w-[1em] h-[1em] fill-current" viewBox="0 0 448 512" aria-hidden="true" focusable="false"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
                     </button>
                 </form>
                 <div id="form-error" class="hidden p-6 rounded-2xl bg-brandBg border border-brandAccent/50 text-brandText/80 text-center text-sm"></div>
@@ -658,7 +658,7 @@
             const successMsg = document.getElementById('form-success');
             const errorMsg = document.getElementById('form-error');
             const btn = form.querySelector('button[type="submit"]');
-            const originalLabel = btn.textContent;
+            const originalLabel = btn.innerHTML;
             const data = new FormData(form);
             data.append('_subject', 'New enquiry from your website');
             data.append('_template', 'table');
@@ -684,7 +684,7 @@
                 errorMsg.innerHTML = 'Something went wrong sending your message. <a class="underline text-brandAccent" href="mailto:theglobalceci@gmail.com?subject=' + subject + '&body=' + body + '">Email me directly instead</a>.';
                 errorMsg.classList.remove('hidden');
                 btn.disabled = false;
-                btn.textContent = originalLabel;
+                btn.innerHTML = originalLabel;
             }
         }
     </script>
